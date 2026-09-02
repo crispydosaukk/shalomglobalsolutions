@@ -1,39 +1,46 @@
+'use client';
+
 import React from 'react';
 import Icon from '@/components/ui/AppIcon';
 import ContactForm from '@/app/components/ContactForm';
-
-const contactDetails = [
-  {
-    icon: 'PhoneIcon',
-    title: 'Phone',
-    value: '+44 (0) 7700 900000',
-    sub: 'Monday – Saturday, 8am – 8pm',
-    color: 'bg-secondary/10 text-secondary',
-  },
-  {
-    icon: 'EnvelopeIcon',
-    title: 'Email',
-    value: 'info@shalomglobalsolution.co.uk',
-    sub: 'We reply within 24 hours',
-    color: 'bg-primary/10 text-primary',
-  },
-  {
-    icon: 'MapPinIcon',
-    title: 'Coverage Area',
-    value: 'United Kingdom',
-    sub: 'Nationwide service delivery',
-    color: 'bg-terracotta/10 text-terracotta',
-  },
-  {
-    icon: 'ClockIcon',
-    title: 'Working Hours',
-    value: 'Mon – Sat: 8am – 8pm',
-    sub: 'Emergency support available',
-    color: 'bg-amber-100 text-amber-600',
-  },
-];
+import { useCMS } from '@/lib/cmsContext';
 
 export default function ContactMain() {
+  const { content } = useCMS();
+  const main = content?.contact?.main;
+  const formCMS = content?.contact?.form;
+
+  const contactDetails = [
+    {
+      icon: 'PhoneIcon',
+      title: main?.phoneTitle || 'Phone',
+      value: main?.phoneNumber || '+44 (0) 7700 900000',
+      sub: main?.hoursWeekdays || 'Monday – Friday, 8am – 7pm',
+      color: 'bg-secondary/10 text-secondary',
+    },
+    {
+      icon: 'EnvelopeIcon',
+      title: main?.emailTitle || 'Email',
+      value: main?.emailAddress || 'info@shalomglobalsolution.co.uk',
+      sub: 'We reply within 2 hours',
+      color: 'bg-primary/10 text-primary',
+    },
+    {
+      icon: 'MapPinIcon',
+      title: main?.officeTitle || 'Office Address',
+      value: main?.officeAddress || '128 City Road, London',
+      sub: main?.officeCity || 'United Kingdom, EC1V 2NX',
+      color: 'bg-terracotta/10 text-terracotta',
+    },
+    {
+      icon: 'ClockIcon',
+      title: main?.hoursTitle || 'Operating Hours',
+      value: main?.hoursWeekdays || 'Mon – Fri: 8am – 7pm',
+      sub: main?.emergencyNote || 'Emergency support available',
+      color: 'bg-amber-100 text-amber-600',
+    },
+  ];
+
   return (
     <section className="py-16 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,7 +69,7 @@ export default function ContactMain() {
               ))}
             </div>
 
-            {/* Map placeholder */}
+            {/* Map banner */}
             <div className="rounded-4xl overflow-hidden bg-muted border border-border h-64 flex items-center justify-center">
               <div className="text-center">
                 <div className="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
@@ -82,8 +89,8 @@ export default function ContactMain() {
                   <Icon name="PaperAirplaneIcon" size={24} className="text-secondary" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-800 text-primary">Send an Enquiry</h3>
-                  <p className="text-xs text-muted-foreground font-500">We respond within 24 hours</p>
+                  <h3 className="text-xl font-800 text-primary">{formCMS?.title || 'Send an Enquiry'}</h3>
+                  <p className="text-xs text-muted-foreground font-500">{formCMS?.subtitle || 'We respond within 24 hours'}</p>
                 </div>
               </div>
               <ContactForm />

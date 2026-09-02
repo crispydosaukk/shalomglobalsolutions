@@ -3,6 +3,10 @@ import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import '../styles/tailwind.css';
 
+import FirebaseAnalytics from '@/components/FirebaseAnalytics';
+import { AuthProvider } from '@/lib/authContext';
+import { CMSProvider } from '@/lib/cmsContext';
+
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
@@ -31,10 +35,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={plusJakartaSans.variable}>
-      <body className={plusJakartaSans.className}>
-        {children}
-</body>
+    <html lang="en" className={plusJakartaSans.variable} suppressHydrationWarning>
+      <body className={plusJakartaSans.className} suppressHydrationWarning>
+        <AuthProvider>
+          <CMSProvider>
+            <FirebaseAnalytics />
+            {children}
+          </CMSProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

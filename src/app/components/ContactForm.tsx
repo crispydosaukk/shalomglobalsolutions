@@ -1,6 +1,9 @@
 'use client';
+
 import React, { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
+import { useCMS } from '@/lib/cmsContext';
+import { submitInquiry } from '@/lib/inquiries';
 
 const serviceOptions = [
   'Professional Cleaning Services',
@@ -9,6 +12,7 @@ const serviceOptions = [
   'Babysitting & Childcare',
   'Handyman Services',
   'Security & Home Safety',
+  'Home-Cooked Meal Services',
   'Multiple Services',
   'Other / General Enquiry',
 ];
@@ -22,6 +26,9 @@ interface FormState {
 }
 
 export default function ContactForm() {
+  const { content } = useCMS();
+  const formCMS = content?.contact?.form;
+
   const [form, setForm] = useState<FormState>({
     fullName: '',
     email: '',
@@ -36,13 +43,25 @@ export default function ContactForm() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      await submitInquiry({
+        name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        service: form.service || 'General Enquiry',
+        message: form.message,
+      });
       setSubmitted(true);
-    }, 1200);
+    } catch (err) {
+      console.error(err);
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -53,7 +72,7 @@ export default function ContactForm() {
         </div>
         <h4 className="text-lg font-800 text-primary mb-2">Thank you, {form.fullName.split(' ')[0]}!</h4>
         <p className="text-muted-foreground text-sm font-500">
-          We&apos;ve received your enquiry and will contact you within 24 hours.
+          {formCMS?.successMessage || "We've received your enquiry and will contact you within 24 hours."}
         </p>
         <button
           onClick={() => { setSubmitted(false); setForm({ fullName: '', email: '', phone: '', service: '', message: '' }); }}
@@ -155,7 +174,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3.5 rounded-xl text-sm font-700 hover:bg-navy-light transition-all disabled:opacity-70"
+        className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3.5 rounded-xl text-sm font-700 hover:bg-navy-light transition-all disabled:opacity-70 shadow-sm"
       >
         {loading ? (
           <>
@@ -165,7 +184,7 @@ export default function ContactForm() {
         ) : (
           <>
             <Icon name="PaperAirplaneIcon" size={16} />
-            Send Enquiry
+            {formCMS?.submitBtnText || 'Send Enquiry'}
           </>
         )}
       </button>

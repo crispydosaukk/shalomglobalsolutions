@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
 import ContactForm from '@/app/components/ContactForm';
+import { useCMS } from '@/lib/cmsContext';
 
 const serviceData: Record<string, {
   title: string;
@@ -328,9 +329,21 @@ const serviceData: Record<string, {
 const defaultService = 'cleaning';
 
 export default function ServiceDetailContent() {
+  const { content } = useCMS();
   const searchParams = useSearchParams();
-  const serviceKey = searchParams.get('service') || defaultService;
-  const service = serviceData[serviceKey] || serviceData[defaultService];
+  const serviceKey = (searchParams.get('service') || defaultService) as keyof typeof content.serviceDetail;
+  
+  const baseService = serviceData[serviceKey] || serviceData[defaultService];
+  const dynamicService = content?.serviceDetail?.[serviceKey];
+
+  const service = {
+    ...baseService,
+    title: dynamicService?.title || baseService.title,
+    subtitle: dynamicService?.subtitle || baseService.subtitle,
+    description: dynamicService?.overview || baseService.description,
+    includes: dynamicService?.features?.length ? dynamicService.features : baseService.includes,
+    benefits: dynamicService?.benefits?.length ? dynamicService.benefits.map((b: any) => `${b.title}: ${b.desc}`) : baseService.benefits,
+  };
 
   const [openFaq, setOpenFaq] = React.useState<number | null>(null);
 

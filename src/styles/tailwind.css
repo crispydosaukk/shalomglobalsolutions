@@ -110,18 +110,6 @@
     background: linear-gradient(135deg, #F5E8EC 0%, #F0D4DA 100%);
   }
 
-  .blob-primary {
-    background: radial-gradient(circle, rgba(91, 139, 107, 0.15) 0%, transparent 70%);
-    filter: blur(60px);
-    border-radius: 50%;
-  }
-
-  .blob-accent {
-    background: radial-gradient(circle, rgba(193, 122, 90, 0.12) 0%, transparent 70%);
-    filter: blur(80px);
-    border-radius: 50%;
-  }
-
   .section-divider {
     height: 1px;
     background: linear-gradient(to right, transparent, var(--border), transparent);
