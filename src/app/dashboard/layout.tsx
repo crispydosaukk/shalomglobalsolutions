@@ -46,6 +46,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       icon: 'Squares2X2Icon' as const,
     },
     {
+      label: 'Manage Services & Pages',
+      href: '/dashboard/services',
+      icon: 'BriefcaseIcon' as const,
+    },
+    {
       label: 'Content Editing Module',
       href: '/dashboard/content',
       icon: 'DocumentTextIcon' as const,

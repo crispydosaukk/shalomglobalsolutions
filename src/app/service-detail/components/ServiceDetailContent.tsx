@@ -328,21 +328,56 @@ const serviceData: Record<string, {
 
 const defaultService = 'cleaning';
 
-export default function ServiceDetailContent() {
+export default function ServiceDetailContent({ serviceSlug }: { serviceSlug?: string } = {}) {
   const { content } = useCMS();
   const searchParams = useSearchParams();
-  const serviceKey = (searchParams.get('service') || defaultService) as keyof typeof content.serviceDetail;
+  const serviceKey = serviceSlug || searchParams.get('service') || defaultService;
   
-  const baseService = serviceData[serviceKey] || serviceData[defaultService];
-  const dynamicService = content?.serviceDetail?.[serviceKey];
+  const baseService = serviceData[serviceKey];
+  const dynamicDetail = content?.serviceDetail?.[serviceKey];
+  const cardService = content?.servicesBento?.services?.find((s) => s.id === serviceKey);
 
   const service = {
-    ...baseService,
-    title: dynamicService?.title || baseService.title,
-    subtitle: dynamicService?.subtitle || baseService.subtitle,
-    description: dynamicService?.overview || baseService.description,
-    includes: dynamicService?.features?.length ? dynamicService.features : baseService.includes,
-    benefits: dynamicService?.benefits?.length ? dynamicService.benefits.map((b: any) => `${b.title}: ${b.desc}`) : baseService.benefits,
+    title: dynamicDetail?.title || cardService?.title || baseService?.title || 'Professional Service',
+    subtitle: dynamicDetail?.subtitle || baseService?.subtitle || 'Quality, Care & Reliability Across the UK',
+    description: dynamicDetail?.overview || cardService?.description || baseService?.description || 'Shalom Global Solution delivers reliable, high-standard professional services for homes, businesses, and properties across the UK.',
+    icon: (cardService as any)?.icon || dynamicDetail?.icon || baseService?.icon || 'SparklesIcon',
+    iconBg: (cardService as any)?.iconBg || baseService?.iconBg || 'bg-secondary/10',
+    iconColor: (cardService as any)?.iconColor || baseService?.iconColor || 'text-secondary',
+    accentColor: baseService?.accentColor || 'bg-secondary',
+    image: (cardService as any)?.image || dynamicDetail?.image || baseService?.image || 'https://img.rocket.new/generatedImages/rocket_gen_img_129d8935b-1772185190403.png',
+    imageAlt: dynamicDetail?.imageAlt || baseService?.imageAlt || 'Professional service by Shalom Global UK',
+    includes: dynamicDetail?.features?.length
+      ? dynamicDetail.features
+      : baseService?.includes || [
+          'Professional, verified, and DBS-checked staff',
+          'Eco-friendly and professional grade equipment',
+          'Flexible booking schedules (single or recurring)',
+          'Transparent, competitive pricing with zero hidden fees',
+          'Full customer satisfaction guarantee',
+        ],
+    benefits: dynamicDetail?.benefits?.length
+      ? dynamicDetail.benefits.map((b: any) => typeof b === 'string' ? b : `${b.title}: ${b.desc}`)
+      : baseService?.benefits || [
+          'Fully Insured: All work carried out safely and compliantly.',
+          'Experienced Team: Trained specialists delivering spotless results.',
+          'Satisfaction Guaranteed: We ensure every job meets your standards.',
+        ],
+    process: dynamicDetail?.process?.length
+      ? dynamicDetail.process
+      : baseService?.process || [
+          { step: '01', title: 'Book Your Service', desc: 'Contact us with your requirements and schedule.' },
+          { step: '02', title: 'We Assess & Quote', desc: 'We provide a clear, transparent quotation tailored to your needs.' },
+          { step: '03', title: 'Professional Delivery', desc: 'Our uniformed team arrives on time and completes the work thoroughly.' },
+          { step: '04', title: 'Quality Assurance', desc: 'We verify everything meets our strict UK standards.' },
+        ],
+    faqs: dynamicDetail?.faqs?.length
+      ? dynamicDetail.faqs
+      : baseService?.faqs || [
+          { q: 'How quickly can I book this service?', a: 'We offer flexible bookings with advance and short-notice slots across the UK.' },
+          { q: 'Are all staff members verified and insured?', a: 'Yes, all our professionals are DBS checked and fully insured under UK regulations.' },
+        ],
+    pricingNote: dynamicDetail?.pricingNote || 'Competitive rates tailored to your property and requirements.',
   };
 
   const [openFaq, setOpenFaq] = React.useState<number | null>(null);
@@ -352,7 +387,7 @@ export default function ServiceDetailContent() {
       {/* Hero */}
       <section className="bg-primary pt-32 pb-16 relative overflow-hidden">
         <div className="absolute inset-0 grid-dot-bg opacity-20" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="site-container relative z-10">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 mb-8">
             <Link href="/" className="text-white/50 text-sm font-500 hover:text-white transition-colors">Home</Link>
@@ -401,7 +436,7 @@ export default function ServiceDetailContent() {
 
       {/* Main content */}
       <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="site-container">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Left: Details */}
             <div className="lg:col-span-2 space-y-12">
@@ -438,40 +473,42 @@ export default function ServiceDetailContent() {
               {/* Process */}
               <div>
                 <h2 className="text-2xl font-800 text-primary mb-8">How It Works</h2>
-                <div className="grid sm:grid-cols-2 gap-5">
+                <div className="grid sm:grid-cols-2 gap-6">
                   {service.process.map((step) =>
-                  <div key={step.step} className="bg-white border border-border rounded-3xl p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-xs font-800 text-secondary/60 uppercase tracking-widest">{step.step}</span>
-                        <div className="h-px flex-1 bg-border" />
+                  <div key={step.step} className="bg-white border border-border rounded-3xl p-6 relative overflow-hidden">
+                      <span className="text-5xl font-800 text-primary/8 absolute top-3 right-4 select-none">
+                        {step.step}
+                      </span>
+                      <div className="w-10 h-10 bg-primary text-primary-foreground rounded-xl flex items-center justify-center text-sm font-800 mb-4">
+                        {step.step}
                       </div>
-                      <h3 className="font-800 text-primary mb-2">{step.title}</h3>
-                      <p className="text-sm text-muted-foreground font-500 leading-relaxed">{step.desc}</p>
+                      <h3 className="font-800 text-lg text-primary mb-2">{step.title}</h3>
+                      <p className="text-muted-foreground text-sm font-500 leading-relaxed">{step.desc}</p>
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* FAQ */}
+              {/* FAQs */}
               <div>
                 <h2 className="text-2xl font-800 text-primary mb-6">Frequently Asked Questions</h2>
                 <div className="space-y-3">
                   {service.faqs.map((faq, i) =>
-                  <div key={i} className="bg-white border border-border rounded-2xl overflow-hidden">
+                  <div key={faq.q} className="bg-white border border-border rounded-2xl overflow-hidden">
                       <button
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full flex items-center justify-between p-5 text-left">
+                      className="w-full flex items-center justify-between p-5 text-left font-700 text-sm text-primary hover:text-secondary transition-colors">
                       
-                        <span className="font-700 text-sm text-primary pr-4">{faq.q}</span>
+                        <span>{faq.q}</span>
                         <Icon
-                        name={openFaq === i ? 'MinusIcon' : 'PlusIcon'}
-                        size={18}
-                        className="text-muted-foreground shrink-0" />
+                        name="ChevronDownIcon"
+                        size={16}
+                        className={`transition-transform shrink-0 ml-4 ${openFaq === i ? 'rotate-180 text-secondary' : 'text-muted-foreground'}`} />
                       
                       </button>
                       {openFaq === i &&
-                    <div className="px-5 pb-5">
-                          <p className="text-sm text-muted-foreground font-500 leading-relaxed">{faq.a}</p>
+                    <div className="px-5 pb-5 text-sm text-muted-foreground font-500 leading-relaxed border-t border-border pt-4">
+                          {faq.a}
                         </div>
                     }
                     </div>
@@ -480,15 +517,16 @@ export default function ServiceDetailContent() {
               </div>
             </div>
 
-            {/* Right: Sticky enquiry form */}
-            <div id="enquiry">
-              <div className="sticky top-24 bg-white border border-border rounded-4xl p-7 shadow-card">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl ${service.iconBg} mb-4`}>
-                  <Icon name={service.icon as any} size={24} className={service.iconColor} />
+            {/* Right: Contact card */}
+            <div className="space-y-6">
+              <div id="enquiry" className="bg-white border border-border rounded-4xl p-8 shadow-card sticky top-28">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-700 mb-4">
+                  <Icon name="ShieldCheckIcon" size={13} />
+                  Fully Insured Service
                 </div>
-                <h3 className="text-lg font-800 text-primary mb-1">Book This Service</h3>
-                <p className="text-sm text-muted-foreground font-500 mb-6 leading-relaxed">
-                  Fill in your details and we&apos;ll get back to you within 24 hours.
+                <h3 className="text-2xl font-800 text-primary mb-2">Request a Quote</h3>
+                <p className="text-muted-foreground text-sm font-500 mb-6">
+                  {service.pricingNote}
                 </p>
                 <ContactForm />
               </div>
@@ -499,20 +537,22 @@ export default function ServiceDetailContent() {
 
       {/* Other services */}
       <section className="py-16 bg-cream-dark/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="site-container text-center">
           <h2 className="text-2xl font-800 text-primary mb-3">Explore Our Other Services</h2>
           <p className="text-muted-foreground font-500 mb-8">One trusted company for all your home and business needs.</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            {Object.entries(serviceData).filter(([key]) => key !== serviceKey).map(([key, s]) =>
-            <Link
-              key={key}
-              href={`/service-detail?service=${key}`}
-              className="inline-flex items-center gap-2 bg-white border border-border text-foreground px-5 py-2.5 rounded-xl text-sm font-600 hover:bg-muted hover:text-primary transition-all shadow-sm">
-              
-                <Icon name={s.icon as any} size={16} className={s.iconColor} />
-                {s.title.split(' ').slice(0, 3).join(' ')}
-              </Link>
-            )}
+            {(content?.servicesBento?.services || Object.entries(serviceData).map(([k, v]) => ({ id: k, title: v.title, icon: v.icon })))
+              .filter((s) => s.id !== serviceKey)
+              .map((s) => (
+                <Link
+                  key={s.id}
+                  href={`/service-detail?service=${s.id}`}
+                  className="inline-flex items-center gap-2 bg-white border border-border text-foreground px-5 py-2.5 rounded-xl text-sm font-600 hover:bg-muted hover:text-primary transition-all shadow-sm"
+                >
+                  <Icon name={(s as any).icon || 'SparklesIcon'} size={16} className="text-secondary" />
+                  {s.title.split(' ').slice(0, 3).join(' ')}
+                </Link>
+              ))}
           </div>
         </div>
       </section>

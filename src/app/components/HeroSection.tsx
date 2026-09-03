@@ -14,7 +14,7 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center overflow-hidden bg-primary pt-20">
       {/* Grid texture */}
       <div className="absolute inset-0 grid-dot-bg opacity-30 pointer-events-none" />
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="relative z-10 site-container py-16 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         {/* Left: Content */}
         <div className="space-y-8">
           {/* Badge */}

@@ -1,3 +1,31 @@
+export interface ServiceCardItem {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  ctaText: string;
+  category?: string;
+  icon?: string;
+  image?: string;
+  iconBg?: string;
+  iconColor?: string;
+}
+
+export interface ServiceDetailItem {
+  title: string;
+  subtitle: string;
+  overview: string;
+  features: string[];
+  benefits: Array<{ title: string; desc: string }>;
+  pricingNote: string;
+  category?: string;
+  icon?: string;
+  image?: string;
+  imageAlt?: string;
+  process?: Array<{ step: string; title: string; desc: string }>;
+  faqs?: Array<{ q: string; a: string }>;
+}
+
 export interface CMSContent {
   header: {
     logoText: string;
@@ -26,13 +54,7 @@ export interface CMSContent {
     titleHighlight: string;
     subtitle: string;
     viewAllBtnText: string;
-    services: Array<{
-      id: string;
-      title: string;
-      description: string;
-      tags: string[];
-      ctaText: string;
-    }>;
+    services: ServiceCardItem[];
   };
   whyChooseUs: {
     badge: string;
@@ -123,64 +145,7 @@ export interface CMSContent {
       subtitle: string;
     };
   };
-  serviceDetail: {
-    cleaning: {
-      title: string;
-      subtitle: string;
-      overview: string;
-      features: string[];
-      benefits: Array<{ title: string; desc: string }>;
-      pricingNote: string;
-    };
-    moving: {
-      title: string;
-      subtitle: string;
-      overview: string;
-      features: string[];
-      benefits: Array<{ title: string; desc: string }>;
-      pricingNote: string;
-    };
-    property: {
-      title: string;
-      subtitle: string;
-      overview: string;
-      features: string[];
-      benefits: Array<{ title: string; desc: string }>;
-      pricingNote: string;
-    };
-    childcare: {
-      title: string;
-      subtitle: string;
-      overview: string;
-      features: string[];
-      benefits: Array<{ title: string; desc: string }>;
-      pricingNote: string;
-    };
-    handyman: {
-      title: string;
-      subtitle: string;
-      overview: string;
-      features: string[];
-      benefits: Array<{ title: string; desc: string }>;
-      pricingNote: string;
-    };
-    security: {
-      title: string;
-      subtitle: string;
-      overview: string;
-      features: string[];
-      benefits: Array<{ title: string; desc: string }>;
-      pricingNote: string;
-    };
-    meals: {
-      title: string;
-      subtitle: string;
-      overview: string;
-      features: string[];
-      benefits: Array<{ title: string; desc: string }>;
-      pricingNote: string;
-    };
-  };
+  serviceDetail: Record<string, ServiceDetailItem>;
   contact: {
     hero: {
       badge: string;

@@ -16,7 +16,7 @@ export default function BlogHero() {
     <section className="bg-primary pt-32 pb-0 relative overflow-hidden">
       <div className="absolute inset-0 grid-dot-bg opacity-20" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-0">
+      <div className="relative z-10 site-container pb-0">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full mb-6">
             <Icon name="NewspaperIcon" size={14} className="text-secondary" />

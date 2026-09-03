@@ -654,6 +654,7 @@ function renderSectionFields(section: SectionKey, data: any, onChange: (path: st
           </p>
           {serviceKeys.map((k) => {
             const item = data[k];
+            if (!item) return null;
             return (
               <div key={k} className="p-5 bg-cream-dark/20 rounded-2xl border border-border space-y-4">
                 <span className="text-xs font-800 text-secondary uppercase tracking-wider block">

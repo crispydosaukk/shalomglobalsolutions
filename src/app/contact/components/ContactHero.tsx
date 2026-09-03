@@ -11,7 +11,7 @@ export default function ContactHero() {
   return (
     <section className="bg-primary pt-32 pb-16 relative overflow-hidden">
       <div className="absolute inset-0 grid-dot-bg opacity-20" />
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 site-container text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full mb-6">
           <Icon name="ChatBubbleLeftRightIcon" size={14} className="text-secondary" />
           <span className="text-xs font-700 uppercase tracking-widest text-white/80">

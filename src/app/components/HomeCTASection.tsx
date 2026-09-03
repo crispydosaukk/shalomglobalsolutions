@@ -14,7 +14,7 @@ export default function HomeCTASection() {
       {/* Grid texture */}
       <div className="absolute inset-0 grid-dot-bg opacity-20 pointer-events-none" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 site-container max-w-6xl text-center">
         <span className="inline-block text-xs font-700 uppercase tracking-widest text-secondary mb-4 px-4 py-1.5 bg-white/10 rounded-full">
           {cta?.badge || 'Ready to Get Started?'}
         </span>

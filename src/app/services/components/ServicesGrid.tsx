@@ -82,17 +82,20 @@ export default function ServicesGrid() {
 
   const allServices = bentoServices.map((srv) => {
     const meta = serviceMetadata[srv.id] || {
-      category: 'Home',
-      icon: 'SparklesIcon',
-      iconBg: 'bg-secondary/20',
-      iconColor: 'text-secondary',
-      image: 'https://img.rocket.new/generatedImages/rocket_gen_img_129d8935b-1772185190403.png',
+      category: srv.category || 'Home',
+      icon: srv.icon || 'SparklesIcon',
+      iconBg: srv.iconBg || 'bg-secondary/20',
+      iconColor: srv.iconColor || 'text-secondary',
+      image: srv.image || 'https://img.rocket.new/generatedImages/rocket_gen_img_129d8935b-1772185190403.png',
       imageAlt: srv.title,
-      highlights: ['Professional Team', 'High Quality Standards', 'Customer Support'],
+      highlights: srv.tags?.slice(0, 3) || ['Professional Team', 'High Quality Standards', 'Customer Support'],
     };
     return {
       ...srv,
       ...meta,
+      image: srv.image || meta.image,
+      category: srv.category || meta.category,
+      icon: srv.icon || meta.icon,
     };
   });
 
@@ -102,7 +105,7 @@ export default function ServicesGrid() {
 
   return (
     <section className="py-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="site-container">
         {/* Filter tabs */}
         <div className="flex flex-wrap gap-2 mb-12 justify-center">
           {categories.map((cat) => (

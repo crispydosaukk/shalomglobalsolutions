@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { defaultCMSContent, CMSContent } from './cmsData';
+import { defaultCMSContent, CMSContent, ServiceCardItem, ServiceDetailItem } from './cmsData';
 import { db } from './firebase';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 
@@ -10,6 +10,9 @@ interface CMSContextType {
   updateSection: <K extends keyof CMSContent>(section: K, data: CMSContent[K]) => Promise<boolean>;
   resetSection: <K extends keyof CMSContent>(section: K) => Promise<boolean>;
   resetAll: () => Promise<boolean>;
+  addService: (card: ServiceCardItem, detail: ServiceDetailItem) => Promise<boolean>;
+  updateService: (id: string, card: ServiceCardItem, detail: ServiceDetailItem) => Promise<boolean>;
+  deleteService: (id: string) => Promise<boolean>;
   isLoading: boolean;
   isSyncing: boolean;
   lastSavedAt: string | null;
@@ -20,6 +23,9 @@ const CMSContext = createContext<CMSContextType>({
   updateSection: async () => false,
   resetSection: async () => false,
   resetAll: async () => false,
+  addService: async () => false,
+  updateService: async () => false,
+  deleteService: async () => false,
   isLoading: false,
   isSyncing: false,
   lastSavedAt: null,
@@ -147,6 +153,128 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  const addService = async (card: ServiceCardItem, detail: ServiceDetailItem): Promise<boolean> => {
+    setIsSyncing(true);
+    const existingServices = content?.servicesBento?.services || [];
+    const rawSlug = card.id || card.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const serviceId = rawSlug || `service-${Date.now()}`;
+    const updatedCard: ServiceCardItem = { ...card, id: serviceId };
+
+    const updatedServices = existingServices.some((s) => s.id === serviceId)
+      ? existingServices.map((s) => (s.id === serviceId ? updatedCard : s))
+      : [...existingServices, updatedCard];
+
+    const updatedServiceDetail = {
+      ...(content?.serviceDetail || {}),
+      [serviceId]: detail,
+    };
+
+    const updatedContent: CMSContent = {
+      ...content,
+      servicesBento: {
+        ...content.servicesBento,
+        services: updatedServices,
+      },
+      serviceDetail: updatedServiceDetail,
+    };
+
+    setContent(updatedContent);
+    const nowTime = new Date().toLocaleTimeString();
+    setLastSavedAt(nowTime);
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedContent));
+      localStorage.setItem(LOCAL_SAVED_TIME_KEY, nowTime);
+    }
+
+    try {
+      const docRef = doc(db, FIRESTORE_COLLECTION, FIRESTORE_DOC);
+      await setDoc(docRef, updatedContent, { merge: true });
+      setIsSyncing(false);
+      return true;
+    } catch (err: any) {
+      console.warn('Firestore addService notice (saved locally as fallback):', err?.message);
+      setIsSyncing(false);
+      return true;
+    }
+  };
+
+  const updateService = async (id: string, card: ServiceCardItem, detail: ServiceDetailItem): Promise<boolean> => {
+    setIsSyncing(true);
+    const existingServices = content?.servicesBento?.services || [];
+    const updatedServices = existingServices.map((s) => (s.id === id ? { ...card, id } : s));
+    const updatedServiceDetail = {
+      ...(content?.serviceDetail || {}),
+      [id]: detail,
+    };
+
+    const updatedContent: CMSContent = {
+      ...content,
+      servicesBento: {
+        ...content.servicesBento,
+        services: updatedServices,
+      },
+      serviceDetail: updatedServiceDetail,
+    };
+
+    setContent(updatedContent);
+    const nowTime = new Date().toLocaleTimeString();
+    setLastSavedAt(nowTime);
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedContent));
+      localStorage.setItem(LOCAL_SAVED_TIME_KEY, nowTime);
+    }
+
+    try {
+      const docRef = doc(db, FIRESTORE_COLLECTION, FIRESTORE_DOC);
+      await setDoc(docRef, updatedContent, { merge: true });
+      setIsSyncing(false);
+      return true;
+    } catch (err: any) {
+      console.warn('Firestore updateService notice (saved locally as fallback):', err?.message);
+      setIsSyncing(false);
+      return true;
+    }
+  };
+
+  const deleteService = async (id: string): Promise<boolean> => {
+    setIsSyncing(true);
+    const existingServices = content?.servicesBento?.services || [];
+    const updatedServices = existingServices.filter((s) => s.id !== id);
+    const updatedServiceDetail = { ...(content?.serviceDetail || {}) };
+    delete updatedServiceDetail[id];
+
+    const updatedContent: CMSContent = {
+      ...content,
+      servicesBento: {
+        ...content.servicesBento,
+        services: updatedServices,
+      },
+      serviceDetail: updatedServiceDetail,
+    };
+
+    setContent(updatedContent);
+    const nowTime = new Date().toLocaleTimeString();
+    setLastSavedAt(nowTime);
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedContent));
+      localStorage.setItem(LOCAL_SAVED_TIME_KEY, nowTime);
+    }
+
+    try {
+      const docRef = doc(db, FIRESTORE_COLLECTION, FIRESTORE_DOC);
+      await setDoc(docRef, updatedContent, { merge: true });
+      setIsSyncing(false);
+      return true;
+    } catch (err: any) {
+      console.warn('Firestore deleteService notice (saved locally as fallback):', err?.message);
+      setIsSyncing(false);
+      return true;
+    }
+  };
+
   return (
     <CMSContext.Provider
       value={{
@@ -154,6 +282,9 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateSection,
         resetSection,
         resetAll,
+        addService,
+        updateService,
+        deleteService,
         isLoading,
         isSyncing,
         lastSavedAt,

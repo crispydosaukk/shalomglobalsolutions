@@ -20,7 +20,7 @@ export default function AboutCredentials() {
 
   return (
     <section className="py-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="site-container">
         <div className="text-center mb-14">
           <span className="inline-block text-xs font-700 uppercase tracking-widest text-secondary mb-3">
             {creds?.badge || 'Credentials'}

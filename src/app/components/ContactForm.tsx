@@ -28,6 +28,8 @@ interface FormState {
 export default function ContactForm() {
   const { content } = useCMS();
   const formCMS = content?.contact?.form;
+  const dynamicServices = content?.servicesBento?.services?.map((s) => s.title) || [];
+  const options = Array.from(new Set([...dynamicServices, ...serviceOptions]));
 
   const [form, setForm] = useState<FormState>({
     fullName: '',
@@ -148,7 +150,7 @@ export default function ContactForm() {
             className="w-full bg-input border border-border rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-secondary/40 transition-all appearance-none"
           >
             <option value="" disabled>Select a service...</option>
-            {serviceOptions.map((opt) => (
+            {options.map((opt) => (
               <option key={opt} value={opt}>{opt}</option>
             ))}
           </select>

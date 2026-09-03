@@ -14,7 +14,7 @@ export default function AboutHero() {
     <section className="bg-primary pt-32 pb-0 relative overflow-hidden">
       <div className="absolute inset-0 grid-dot-bg opacity-20" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-0">
+      <div className="relative z-10 site-container pb-0">
         <div className="grid lg:grid-cols-2 gap-16 items-end">
           <div className="pb-20">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full mb-6">
@@ -57,7 +57,7 @@ export default function AboutHero() {
       </div>
 
       <div className="relative z-10 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="site-container py-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {hero?.stats?.map((stat) => (
               <div key={stat.label} className="text-center">
