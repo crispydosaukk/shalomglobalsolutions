@@ -675,7 +675,7 @@ export const defaultCMSContent: CMSContent = {
       title: 'Send Us a Message',
       subtitle: 'Fill out the form below and our team will get back to you with a free consultation and quote.',
       submitBtnText: 'Send Message & Get Quote',
-      successMessage: 'Thank you! Your inquiry has been received. Our team will contact you shortly.',
+      successMessage: 'Thank you! Your enquiry has been received. Our team will contact you shortly.',
     },
     faq: {
       badge: 'Frequently Asked Questions',
