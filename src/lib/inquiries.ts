@@ -60,9 +60,14 @@ export async function submitInquiry(
     }
   }
 
-  // Send Email Notification via API (zingbiteuk@gmail.com -> rahulbadugu22@gmail.com)
+  // Send Email Notification via API
   try {
-    fetch('/api/send-email', {
+    const isStaticHost = typeof window !== 'undefined' && !window.location.hostname.includes('vercel.app') && !window.location.hostname.includes('localhost');
+    const endpoint = isStaticHost
+      ? 'https://shalomglobalsolutions.vercel.app/api/send-email'
+      : (process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/send-email` : '/api/send-email');
+
+    fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(item),

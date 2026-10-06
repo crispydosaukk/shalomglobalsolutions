@@ -148,12 +148,32 @@ export async function POST(req: NextRequest) {
       success: true,
       messageId: info.messageId,
       deliveredTo: recipients,
+    }, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
   } catch (error: any) {
     console.error('Error sending email notification:', error);
     return NextResponse.json(
       { success: false, error: error?.message || 'Failed to send email notification' },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
     );
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
 }
