@@ -212,6 +212,10 @@ export interface CMSContent {
     senderName: string;
     subjectPrefix: string;
   };
+  adminSecurity?: {
+    adminPassword?: string;
+    adminEmails?: string[];
+  };
 }
 
 export const defaultCMSContent: CMSContent = {
@@ -766,5 +770,14 @@ export const defaultCMSContent: CMSContent = {
     recipients: ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com', 'info@shalomgsolutions.co.uk'],
     senderName: 'ShalomGlobal Service Enquiry',
     subjectPrefix: '🔔 New ShalomGlobal Service Enquiry',
+  },
+  adminSecurity: {
+    adminPassword: 'ShalomGlobal@2026',
+    adminEmails: [
+      'info@shalomgsolutions.co.uk',
+      'sgs.london2015@gmail.com',
+      'digitalbotsolutions@gmail.com',
+      'rahulbadugu22@gmail.com',
+    ],
   },
 };

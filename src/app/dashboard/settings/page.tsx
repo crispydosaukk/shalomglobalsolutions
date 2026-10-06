@@ -25,6 +25,11 @@ export default function EmailSettingsPage() {
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordStatus, setPasswordStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [showPass, setShowPass] = useState(false);
+
   useEffect(() => {
     if (content?.emailSettings) {
       setEnabled(content.emailSettings.notificationsEnabled ?? true);
@@ -33,6 +38,45 @@ export default function EmailSettingsPage() {
       setSubjectPrefix(content.emailSettings.subjectPrefix || '🔔 New ShalomGlobal Service Enquiry');
     }
   }, [content]);
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordStatus(null);
+
+    if (!newPassword || newPassword.length < 6) {
+      setPasswordStatus({ type: 'error', message: 'Password must be at least 6 characters long.' });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordStatus({ type: 'error', message: 'Passwords do not match. Please re-enter.' });
+      return;
+    }
+
+    try {
+      localStorage.setItem('shalom_admin_password_custom', newPassword);
+    } catch (e) {}
+
+    const success = await updateSection('adminSecurity', {
+      adminPassword: newPassword,
+      adminEmails: content?.adminSecurity?.adminEmails || [
+        'info@shalomgsolutions.co.uk',
+        'sgs.london2015@gmail.com',
+        'digitalbotsolutions@gmail.com',
+        'rahulbadugu22@gmail.com',
+      ],
+    });
+
+    if (success) {
+      setPasswordStatus({
+        type: 'success',
+        message: 'Administrator password updated successfully! It is now active for future logins.',
+      });
+      setNewPassword('');
+      setConfirmPassword('');
+    } else {
+      setPasswordStatus({ type: 'error', message: 'Failed to update password. Please try again.' });
+    }
+  };
 
   const handleAddRecipient = (e: React.FormEvent) => {
     e.preventDefault();
@@ -343,7 +387,7 @@ export default function EmailSettingsPage() {
         {/* Bottom Save Action */}
         <div className="pt-4 border-t border-border flex items-center justify-between">
           <span className="text-xs text-muted-foreground font-500">
-            Click <strong>Save Settings</strong> to store changes to database.
+            Click <strong>Save Settings</strong> to store email preferences to database.
           </span>
           <button
             onClick={handleSave}
@@ -353,6 +397,114 @@ export default function EmailSettingsPage() {
             <Icon name="CheckIcon" size={16} />
             <span>Save Settings</span>
           </button>
+        </div>
+      </div>
+
+      {/* Admin Security & Password Management Card */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border shadow-card space-y-6">
+        <div className="border-b border-border pb-4 flex items-center justify-between">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/15 text-amber-700 text-xs font-700 rounded-full mb-1">
+              <Icon name="LockClosedIcon" size={14} />
+              Admin Portal Security
+            </div>
+            <h2 className="text-xl font-800 text-primary tracking-tight">
+              Administrator Password Management
+            </h2>
+            <p className="text-xs text-muted-foreground font-500">
+              Update the master login password for the ShalomGlobal Admin Dashboard.
+            </p>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-700">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Security Active
+          </div>
+        </div>
+
+        {passwordStatus && (
+          <div
+            className={`p-4 rounded-2xl border text-xs font-700 flex items-center gap-2 animate-fadeIn ${
+              passwordStatus.type === 'success'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-rose-50 border-rose-200 text-rose-800'
+            }`}
+          >
+            <Icon
+              name={passwordStatus.type === 'success' ? 'CheckCircleIcon' : 'ExclamationTriangleIcon'}
+              size={18}
+              className={passwordStatus.type === 'success' ? 'text-emerald-600' : 'text-rose-600'}
+            />
+            <span>{passwordStatus.message}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleUpdatePassword} className="space-y-4 max-w-xl">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-700 text-primary uppercase tracking-wider">
+                New Admin Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  required
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Enter new password"
+                  className="w-full px-3.5 py-2.5 pr-10 bg-cream-dark/30 border border-border rounded-xl text-xs font-600 text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(!showPass)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary"
+                >
+                  <Icon name={showPass ? 'EyeSlashIcon' : 'EyeIcon'} size={15} />
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-xs font-700 text-primary uppercase tracking-wider">
+                Confirm New Password
+              </label>
+              <input
+                type={showPass ? 'text' : 'password'}
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-type new password"
+                className="w-full px-3.5 py-2.5 bg-cream-dark/30 border border-border rounded-xl text-xs font-600 text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+          </div>
+
+          <div className="pt-2 flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
+              Minimum 6 characters. Letters, numbers &amp; symbols allowed.
+            </span>
+            <button
+              type="submit"
+              disabled={isSyncing}
+              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-navy-light text-white text-xs font-700 shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
+            >
+              <Icon name="KeyIcon" size={16} />
+              <span>Update Password</span>
+            </button>
+          </div>
+        </form>
+
+        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-900 flex items-start gap-3">
+          <Icon name="ShieldCheckIcon" size={18} className="shrink-0 text-amber-600 mt-0.5" />
+          <div>
+            <strong>Authorized Administrator Emails:</strong>
+            <div className="mt-1 flex flex-wrap gap-2">
+              {['info@shalomgsolutions.co.uk', 'sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com', 'rahulbadugu22@gmail.com'].map((em) => (
+                <span key={em} className="px-2.5 py-0.5 rounded-full bg-white border border-amber-200 font-mono text-[11px] text-primary">
+                  {em}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       </div>

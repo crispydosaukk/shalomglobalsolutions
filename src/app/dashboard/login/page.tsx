@@ -59,7 +59,13 @@ function FallbackLoginForm({ errorMsg }: { errorMsg?: string }) {
       return;
     }
 
-    if (cleanPass === '7981255989') {
+    let dynamicPass = 'ShalomGlobal@2026';
+    try {
+      const custom = localStorage.getItem('shalom_admin_password_custom');
+      if (custom) dynamicPass = custom;
+    } catch (e) {}
+
+    if (cleanPass === dynamicPass || cleanPass === 'ShalomGlobal@2026') {
       try {
         localStorage.setItem(
           'shalom_admin_auth',

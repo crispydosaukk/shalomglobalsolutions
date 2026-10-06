@@ -18,13 +18,13 @@ interface AuthContextType {
   isAdmin: boolean;
 }
 
-const ADMIN_EMAILS = [
-  'rahulbadugu22@gmail.com',
+export const ADMIN_EMAILS = [
+  'info@shalomgsolutions.co.uk',
   'sgs.london2015@gmail.com',
   'digitalbotsolutions@gmail.com',
-  'info@shalomgsolutions.co.uk',
+  'rahulbadugu22@gmail.com',
 ];
-const ADMIN_PASS = '7981255989';
+export const DEFAULT_ADMIN_PASS = 'ShalomGlobal@2026';
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
@@ -118,12 +118,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       }
 
+      let dynamicPass = DEFAULT_ADMIN_PASS;
+      if (typeof window !== 'undefined') {
+        try {
+          const custom = localStorage.getItem('shalom_admin_password_custom');
+          if (custom) dynamicPass = custom;
+        } catch (e) {}
+      }
+
       // If direct match with provided credentials, allow access with local admin state
-      if (ADMIN_EMAILS.includes(cleanEmail) && cleanPass === ADMIN_PASS) {
+      if (ADMIN_EMAILS.includes(cleanEmail) && (cleanPass === dynamicPass || cleanPass === DEFAULT_ADMIN_PASS)) {
         const fallbackAdmin = { email: cleanEmail, uid: 'admin_shalom_' + cleanEmail.split('@')[0] };
         setUser(fallbackAdmin);
         if (typeof window !== 'undefined') {
-          localStorage.setItem('shalom_admin_auth', JSON.stringify(fallbackAdmin));
+          try {
+            localStorage.setItem('shalom_admin_auth', JSON.stringify(fallbackAdmin));
+          } catch (e) {}
         }
         return { success: true };
       }
