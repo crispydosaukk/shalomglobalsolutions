@@ -14,13 +14,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user, loading, logout } = useAuth();
   const { isSyncing, lastSavedAt } = useCMS();
 
-  useEffect(() => {
-    if (!loading && !user && pathname !== '/dashboard/login') {
-      router.push('/dashboard/login');
-    }
-  }, [user, loading, pathname, router]);
+  const isLoginPage =
+    pathname?.replace(/\/$/, '') === '/dashboard/login' ||
+    (typeof window !== 'undefined' && window.location.pathname.replace(/\/$/, '') === '/dashboard/login');
 
-  if (pathname === '/dashboard/login') {
+  useEffect(() => {
+    if (!loading && !user && !isLoginPage) {
+      router.push('/dashboard/login/');
+    }
+  }, [user, loading, isLoginPage, router]);
+
+  if (isLoginPage) {
     return <>{children}</>;
   }
 
@@ -89,7 +93,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               Control Center
             </div>
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive = pathname?.replace(/\/$/, '') === item.href.replace(/\/$/, '');
               return (
                 <Link
                   key={item.href}

@@ -24,7 +24,7 @@ export default function LoginPage() {
     try {
       const res = await login(email, password);
       if (res.success) {
-        router.push('/dashboard');
+        window.location.href = '/dashboard/';
       } else {
         setError(res.error || 'Failed to sign in. Please check your credentials.');
       }
