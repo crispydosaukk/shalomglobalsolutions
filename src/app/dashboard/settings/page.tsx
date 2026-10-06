@@ -10,15 +10,15 @@ export default function EmailSettingsPage() {
   const currentSettings = content?.emailSettings || {
     notificationsEnabled: true,
     recipients: defaultRecipients,
-    senderName: 'ShalomGlobal Notifications',
-    subjectPrefix: '🔔 New ShalomGlobal Lead',
+    senderName: 'ShalomGlobal Service Enquiry',
+    subjectPrefix: '🔔 New ShalomGlobal Service Enquiry',
   };
 
   const [enabled, setEnabled] = useState(currentSettings.notificationsEnabled);
   const [recipients, setRecipients] = useState<string[]>(currentSettings.recipients || defaultRecipients);
   const [newEmailInput, setNewEmailInput] = useState('');
-  const [senderName, setSenderName] = useState(currentSettings.senderName || 'ShalomGlobal Notifications');
-  const [subjectPrefix, setSubjectPrefix] = useState(currentSettings.subjectPrefix || '🔔 New ShalomGlobal Lead');
+  const [senderName, setSenderName] = useState(currentSettings.senderName || 'ShalomGlobal Service Enquiry');
+  const [subjectPrefix, setSubjectPrefix] = useState(currentSettings.subjectPrefix || '🔔 New ShalomGlobal Service Enquiry');
 
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -28,8 +28,8 @@ export default function EmailSettingsPage() {
     if (content?.emailSettings) {
       setEnabled(content.emailSettings.notificationsEnabled ?? true);
       setRecipients(content.emailSettings.recipients || defaultRecipients);
-      setSenderName(content.emailSettings.senderName || 'ShalomGlobal Notifications');
-      setSubjectPrefix(content.emailSettings.subjectPrefix || '🔔 New ShalomGlobal Lead');
+      setSenderName(content.emailSettings.senderName || 'ShalomGlobal Service Enquiry');
+      setSubjectPrefix(content.emailSettings.subjectPrefix || '🔔 New ShalomGlobal Service Enquiry');
     }
   }, [content]);
 

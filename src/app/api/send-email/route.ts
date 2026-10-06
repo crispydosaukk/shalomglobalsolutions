@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
       ? process.env.ADMIN_EMAIL_RECIPIENT.split(',').map((s) => s.trim()).filter(Boolean)
       : defaultRecipients;
     if (recipients.length === 0) recipients = defaultRecipients;
-    let senderName = 'ShalomGlobal Notifications';
-    let subjectPrefix = '🔔 New ShalomGlobal Lead';
+    let senderName = 'ShalomGlobal Service Enquiry';
+    let subjectPrefix = '🔔 New ShalomGlobal Service Enquiry';
 
     try {
       const docRef = doc(db, 'site_content', 'main_content');
@@ -103,8 +103,8 @@ export async function POST(req: NextRequest) {
         <div class="container">
           <div class="header">
             <div class="badge">${isTest ? 'System Test' : 'New Customer Lead'}</div>
-            <h1>${isTest ? 'Email System Verification' : 'ShalomGlobal Service Inquiry'}</h1>
-            <p>${isTest ? 'This is a test notification from your Admin Dashboard.' : 'A new customer has submitted an inquiry through the website.'}</p>
+            <h1>${isTest ? 'Email System Verification' : 'ShalomGlobal Service Enquiry'}</h1>
+            <p>${isTest ? 'This is a test notification from your Admin Dashboard.' : 'A new customer has submitted an enquiry through the website.'}</p>
           </div>
           <div class="body">
             <div class="field">
@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
             </div>
             <div class="message-box">
               <div class="field-label">Message Details:</div>
-              <p style="margin: 6px 0 0 0; font-size: 14px; color: #2d3748; line-height: 1.6; white-space: pre-wrap;">${message || (isTest ? 'Your automated mail integration is fully active and working properly! Future customer inquiries will be dispatched directly to all configured recipients.' : 'No additional message provided.')}</p>
+              <p style="margin: 6px 0 0 0; font-size: 14px; color: #2d3748; line-height: 1.6; white-space: pre-wrap;">${message || (isTest ? 'Your automated mail integration is fully active and working properly! Future customer enquiries will be dispatched directly to all configured recipients.' : 'No additional message provided.')}</p>
             </div>
           </div>
           <div class="footer">

@@ -72,7 +72,7 @@ export default function ContactForm({ initialService }: ContactFormProps = {}) {
       if (res.success) {
         setSubmitted(true);
       } else {
-        setErrorMessage('Unable to send inquiry right now. Please call us directly at 07493109832.');
+        setErrorMessage('Unable to send enquiry right now. Please call us directly at 07493109832.');
       }
     } catch (err) {
       console.error(err);
