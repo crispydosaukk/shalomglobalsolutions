@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
 import { getInquiries, deleteInquiry, Inquiry } from '@/lib/inquiries';
+import DashboardShell from '@/app/dashboard/components/DashboardShell';
 
 export default function InquiriesPage() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
@@ -37,7 +38,8 @@ export default function InquiriesPage() {
   );
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <DashboardShell>
+      <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header banner */}
       <div className="bg-white rounded-3xl p-6 border border-border shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -155,6 +157,7 @@ export default function InquiriesPage() {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </DashboardShell>
   );
 }

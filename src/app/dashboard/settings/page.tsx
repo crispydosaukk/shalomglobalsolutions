@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Icon from '@/components/ui/AppIcon';
 import { useCMS } from '@/lib/cmsContext';
+import DashboardShell from '@/app/dashboard/components/DashboardShell';
 
 export default function EmailSettingsPage() {
   const { content, updateSection, isSyncing, lastSavedAt } = useCMS();
@@ -109,7 +110,8 @@ export default function EmailSettingsPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <DashboardShell>
+      <div className="space-y-8 max-w-5xl mx-auto">
       {/* Top Banner */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -353,6 +355,7 @@ export default function EmailSettingsPage() {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }

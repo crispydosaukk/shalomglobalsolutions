@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useCMS } from '@/lib/cmsContext';
 import { CMSContent } from '@/lib/cmsData';
 import Icon from '@/components/ui/AppIcon';
+import DashboardShell from '@/app/dashboard/components/DashboardShell';
 
 type SectionKey = keyof CMSContent;
 
@@ -26,9 +27,11 @@ const SECTION_OPTIONS: { key: SectionKey; label: string; icon: string; desc: str
 
 export default function ContentEditorPageWrapper() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-sm font-semibold text-primary">Loading Content Module...</div>}>
-      <ContentEditorPage />
-    </Suspense>
+    <DashboardShell>
+      <Suspense fallback={<div className="p-8 text-center text-sm font-semibold text-primary">Loading Content Module...</div>}>
+        <ContentEditorPage />
+      </Suspense>
+    </DashboardShell>
   );
 }
 

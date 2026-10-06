@@ -1,6 +1,6 @@
 import { imageHosts } from './image-hosts.config.mjs';
 
-const isStaticExport = process.env.STATIC_EXPORT === 'true';
+const isStaticExport = true;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

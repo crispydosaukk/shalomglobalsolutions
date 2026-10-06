@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 import { useCMS } from '@/lib/cmsContext';
+import DashboardShell from '@/app/dashboard/components/DashboardShell';
 import {
   subscribeInquiries,
   updateInquiryStatus,
@@ -153,7 +154,8 @@ export default function DashboardReportsPage() {
   });
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <DashboardShell>
+      <div className="space-y-8 max-w-7xl mx-auto">
       {/* Top Banner & Report Action Bar */}
       <div className="bg-primary rounded-3xl p-8 text-white relative overflow-hidden shadow-card">
         <div className="absolute inset-0 grid-dot-bg opacity-15 pointer-events-none" />
@@ -536,6 +538,7 @@ export default function DashboardReportsPage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }

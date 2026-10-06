@@ -6,6 +6,7 @@ import { useCMS } from '@/lib/cmsContext';
 import { ServiceCardItem, ServiceDetailItem } from '@/lib/cmsData';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
+import DashboardShell from '@/app/dashboard/components/DashboardShell';
 
 const AVAILABLE_ICONS = [
   'SparklesIcon',
@@ -235,7 +236,8 @@ export default function ServicesManagerPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <DashboardShell>
+      <div className="space-y-8 max-w-7xl mx-auto">
       {/* Toast Notification */}
       {saveToast && (
         <div className="fixed bottom-6 right-6 z-50 bg-emerald-600 text-white px-6 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-fade-in-up">
@@ -829,6 +831,7 @@ export default function ServicesManagerPage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
