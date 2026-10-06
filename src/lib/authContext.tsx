@@ -18,7 +18,12 @@ interface AuthContextType {
   isAdmin: boolean;
 }
 
-const ADMIN_EMAILS = ['rahulbadugu22@gmail.com', 'sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'];
+const ADMIN_EMAILS = [
+  'rahulbadugu22@gmail.com',
+  'sgs.london2015@gmail.com',
+  'digitalbotsolutions@gmail.com',
+  'info@shalomgsolutions.co.uk',
+];
 const ADMIN_PASS = '7981255989';
 
 const AuthContext = createContext<AuthContextType>({

@@ -6,7 +6,7 @@ import { useCMS } from '@/lib/cmsContext';
 
 export default function EmailSettingsPage() {
   const { content, updateSection, isSyncing, lastSavedAt } = useCMS();
-  const defaultRecipients = ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'];
+  const defaultRecipients = ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com', 'info@shalomgsolutions.co.uk'];
   const currentSettings = content?.emailSettings || {
     notificationsEnabled: true,
     recipients: defaultRecipients,

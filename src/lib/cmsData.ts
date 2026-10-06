@@ -763,7 +763,7 @@ export const defaultCMSContent: CMSContent = {
   },
   emailSettings: {
     notificationsEnabled: true,
-    recipients: ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'],
+    recipients: ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com', 'info@shalomgsolutions.co.uk'],
     senderName: 'ShalomGlobal Service Enquiry',
     subjectPrefix: '🔔 New ShalomGlobal Service Enquiry',
   },

@@ -75,7 +75,7 @@ export async function submitInquiry(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ...item,
-        customRecipients: ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'],
+        customRecipients: ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com', 'info@shalomgsolutions.co.uk'],
       }),
     });
   } catch (e) {
