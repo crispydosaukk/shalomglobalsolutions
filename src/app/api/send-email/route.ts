@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
             </div>
             <div class="field">
               <div class="field-label">Phone Number</div>
-              <div class="field-value">${phone ? `<a href="tel:${phone}" style="color: #1B263B; text-decoration: none;">📞 ${phone}</a>` : '+44 (0) 7700 900000'}</div>
+              <div class="field-value">${phone ? `<a href="tel:${phone}" style="color: #1B263B; text-decoration: none;">📞 ${phone}</a>` : '07493109832'}</div>
             </div>
             <div class="field">
               <div class="field-label">Email Address</div>

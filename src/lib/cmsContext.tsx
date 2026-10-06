@@ -50,6 +50,33 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const savedTime = localStorage.getItem(LOCAL_SAVED_TIME_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
+          // Upgrade old placeholder addresses and phone numbers to live details
+          if (parsed.contact?.main?.officeAddress?.includes('128 City Road') || parsed.contact?.main?.phoneNumber?.includes('7700')) {
+            parsed.contact = {
+              ...parsed.contact,
+              main: {
+                ...parsed.contact?.main,
+                officeAddress: '241e, High Street',
+                officeCity: 'London, E12 6SJ',
+                phoneNumber: '07493109832',
+                hoursTitle: 'Business Hours',
+                hoursWeekdays: '10.00 am to 6 pm',
+              },
+            };
+          }
+          if (parsed.footer?.phoneNumber?.includes('7700') || parsed.footer?.locationText === 'United Kingdom') {
+            parsed.footer = {
+              ...parsed.footer,
+              locationText: '241e, High Street, London, E12 6SJ',
+              phoneNumber: '07493109832',
+            };
+          }
+          if (parsed.homeCTA?.phoneDisplay?.includes('7700')) {
+            parsed.homeCTA = { ...parsed.homeCTA, phoneDisplay: '07493109832' };
+          }
+          if (parsed.servicesPage?.hero?.phoneDisplay?.includes('7700')) {
+            parsed.servicesPage.hero = { ...parsed.servicesPage.hero, phoneDisplay: '07493109832' };
+          }
           setContent((prev) => ({ ...prev, ...parsed }));
         }
         if (savedTime) {

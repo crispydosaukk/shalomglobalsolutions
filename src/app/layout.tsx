@@ -33,9 +33,38 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Shalom Global Solution Ltd',
+  telephone: '07493109832',
+  email: 'info@shalomglobalsolution.co.uk',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '241e, High Street',
+    addressLocality: 'London',
+    postalCode: 'E12 6SJ',
+    addressCountry: 'GB',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '10:00',
+      closes: '18:00',
+    },
+  ],
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={plusJakartaSans.variable} suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body className={plusJakartaSans.className} suppressHydrationWarning>
         <AuthProvider>
           <CMSProvider>

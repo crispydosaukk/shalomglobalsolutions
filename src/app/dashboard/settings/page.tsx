@@ -77,7 +77,7 @@ export default function EmailSettingsPage() {
           isTest: true,
           name: 'Admin Test Verification',
           service: 'Email System Verification',
-          phone: '+44 (0) 7700 900000',
+          phone: '07493109832',
           email: recipients[0] || 'admin@shalomglobalsolution.co.uk',
           message: 'This is an instant verification email sent from your ShalomGlobal Admin Portal. Your email dispatch pipeline is fully working!',
           customRecipients: recipients,

@@ -131,7 +131,7 @@ export default function ContactForm() {
           value={form.phone}
           onChange={handleChange}
           required
-          placeholder="+44 7700 900000"
+          placeholder="e.g. 07493109832"
           className="w-full bg-input border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-secondary/40 transition-all"
         />
       </div>

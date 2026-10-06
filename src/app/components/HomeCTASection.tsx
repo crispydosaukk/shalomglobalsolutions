@@ -37,7 +37,7 @@ export default function HomeCTASection() {
             {cta?.quoteBtnText || 'Request a Free Quote'}
           </Link>
           <a
-            href={`tel:${cta?.phoneDisplay || '+447700900000'}`}
+            href={`tel:${cta?.phoneDisplay || '07493109832'}`}
             className="inline-flex items-center gap-2 border-2 border-white/30 text-white px-8 py-4 rounded-xl text-base font-700 hover:bg-white/10 transition-all duration-200"
           >
             <Icon name="PhoneIcon" size={18} />

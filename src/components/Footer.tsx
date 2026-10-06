@@ -48,7 +48,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 text-sm text-white/60">
               <Icon name="MapPinIcon" size={16} className="text-secondary shrink-0" />
-              {f?.locationText || 'United Kingdom'}
+              {f?.locationText || '241e, High Street, London, E12 6SJ'}
             </div>
           </div>
 
@@ -92,17 +92,25 @@ export default function Footer() {
           <div>
             <p className="text-xs font-700 uppercase tracking-widest text-white/40 mb-4">Get in Touch</p>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-sm text-white/60">
+              <li className="flex items-start gap-2 text-sm text-white/70">
+                <Icon name="MapPinIcon" size={15} className="text-secondary shrink-0 mt-0.5" />
+                <span>{f?.locationText || '241e, High Street, London, E12 6SJ'}</span>
+              </li>
+              <li className="flex items-center gap-2 text-sm text-white/70">
                 <Icon name="PhoneIcon" size={15} className="text-secondary shrink-0" />
-                <a href={`tel:${f?.phoneNumber}`} className="hover:text-white transition-colors">
-                  {f?.phoneNumber || '+44 (0) 7700 900000'}
+                <a href={`tel:${f?.phoneNumber || '07493109832'}`} className="hover:text-white transition-colors font-600">
+                  {f?.phoneNumber || '07493109832'}
                 </a>
               </li>
-              <li className="flex items-center gap-2 text-sm text-white/60">
+              <li className="flex items-center gap-2 text-sm text-white/70">
                 <Icon name="EnvelopeIcon" size={15} className="text-secondary shrink-0" />
-                <a href={`mailto:${f?.emailAddress}`} className="hover:text-white transition-colors">
+                <a href={`mailto:${f?.emailAddress || 'info@shalomglobalsolution.co.uk'}`} className="hover:text-white transition-colors">
                   {f?.emailAddress || 'info@shalomglobalsolution.co.uk'}
                 </a>
+              </li>
+              <li className="flex items-center gap-2 text-xs text-white/50 pt-1 border-t border-white/10">
+                <Icon name="ClockIcon" size={14} className="text-secondary shrink-0" />
+                <span>Mon – Fri: 10.00 am to 6 pm</span>
               </li>
             </ul>
             <Link
