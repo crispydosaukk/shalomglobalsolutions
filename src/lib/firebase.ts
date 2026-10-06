@@ -18,11 +18,21 @@ const app: FirebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebas
 
 let analytics: Analytics | null = null;
 if (typeof window !== 'undefined') {
-  isSupported().then((supported) => {
-    if (supported) {
-      analytics = getAnalytics(app);
-    }
-  });
+  try {
+    isSupported()
+      .then((supported) => {
+        if (supported) {
+          try {
+            analytics = getAnalytics(app);
+          } catch (e) {
+            // Ignore
+          }
+        }
+      })
+      .catch(() => {});
+  } catch (e) {
+    // Ignore
+  }
 }
 
 const auth: Auth = getAuth(app);

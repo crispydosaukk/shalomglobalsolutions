@@ -6,11 +6,21 @@ import { getAnalytics, isSupported } from 'firebase/analytics';
 
 export default function FirebaseAnalytics() {
   useEffect(() => {
-    isSupported().then((supported) => {
-      if (supported) {
-        getAnalytics(app);
-      }
-    });
+    try {
+      isSupported()
+        .then((supported) => {
+          if (supported) {
+            try {
+              getAnalytics(app);
+            } catch (e) {
+              // Ignore already-initialized or blocked analytics
+            }
+          }
+        })
+        .catch(() => {});
+    } catch (e) {
+      // Ignore
+    }
   }, []);
 
   return null;

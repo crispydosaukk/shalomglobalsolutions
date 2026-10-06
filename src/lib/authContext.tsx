@@ -41,33 +41,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Check local fallback first
     if (typeof window !== 'undefined') {
-      const cachedAuth = localStorage.getItem('shalom_admin_auth');
-      if (cachedAuth) {
-        try {
+      try {
+        const cachedAuth = localStorage.getItem('shalom_admin_auth');
+        if (cachedAuth) {
           const parsed = JSON.parse(cachedAuth);
           if (parsed?.email && ADMIN_EMAILS.includes(parsed.email.toLowerCase())) {
             setUser(parsed);
           }
-        } catch (e) {
-          console.error(e);
         }
+      } catch (e) {
+        // Silently handle localStorage read errors
       }
     }
 
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('shalom_admin_auth', JSON.stringify({ email: firebaseUser.email, uid: firebaseUser.uid }));
+    let unsubscribe = () => {};
+    try {
+      unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        if (firebaseUser) {
+          setUser(firebaseUser);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('shalom_admin_auth', JSON.stringify({ email: firebaseUser.email, uid: firebaseUser.uid }));
+            } catch (e) {}
+          }
+        } else {
+          try {
+            const cached = typeof window !== 'undefined' ? localStorage.getItem('shalom_admin_auth') : null;
+            if (!cached) {
+              setUser(null);
+            }
+          } catch (e) {}
         }
-      } else {
-        const cached = typeof window !== 'undefined' ? localStorage.getItem('shalom_admin_auth') : null;
-        if (!cached) {
-          setUser(null);
-        }
-      }
+        setLoading(false);
+      }, (err) => {
+        console.warn('Auth state notice:', err);
+        setLoading(false);
+      });
+    } catch (e) {
       setLoading(false);
-    });
+    }
 
     return () => unsubscribe();
   }, []);
