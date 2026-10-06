@@ -15,7 +15,12 @@ export function generateStaticParams() {
   ];
 }
 
-export default function DynamicServicePage({ params }: { params: { slug: string } }) {
+export default async function DynamicServicePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
   return (
     <>
       <Header />
@@ -27,7 +32,7 @@ export default function DynamicServicePage({ params }: { params: { slug: string 
             </div>
           }
         >
-          <ServiceDetailContent serviceSlug={params.slug} />
+          <ServiceDetailContent serviceSlug={slug} />
         </Suspense>
       </main>
       <Footer />

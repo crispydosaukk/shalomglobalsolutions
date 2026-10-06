@@ -25,7 +25,11 @@ interface FormState {
   message: string;
 }
 
-export default function ContactForm() {
+interface ContactFormProps {
+  initialService?: string;
+}
+
+export default function ContactForm({ initialService }: ContactFormProps = {}) {
   const { content } = useCMS();
   const formCMS = content?.contact?.form;
   const dynamicServices = content?.servicesBento?.services?.map((s) => s.title) || [];
@@ -35,11 +39,18 @@ export default function ContactForm() {
     fullName: '',
     email: '',
     phone: '',
-    service: '',
+    service: initialService || '',
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (initialService) {
+      setForm((prev) => ({ ...prev, service: initialService }));
+    }
+  }, [initialService]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -48,19 +59,24 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage(null);
 
     try {
-      await submitInquiry({
+      const res = await submitInquiry({
         name: form.fullName,
         email: form.email,
         phone: form.phone,
         service: form.service || 'General Enquiry',
         message: form.message,
       });
-      setSubmitted(true);
+      if (res.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage('Unable to send inquiry right now. Please call us directly at 07493109832.');
+      }
     } catch (err) {
       console.error(err);
-      setSubmitted(true);
+      setErrorMessage('Something went wrong. Please call us directly at 07493109832.');
     } finally {
       setLoading(false);
     }
@@ -172,6 +188,13 @@ export default function ContactForm() {
           className="w-full bg-input border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-secondary/40 transition-all resize-none"
         />
       </div>
+
+      {errorMessage && (
+        <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center gap-2">
+          <Icon name="ExclamationTriangleIcon" size={16} className="text-red-500 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
 
       <button
         type="submit"

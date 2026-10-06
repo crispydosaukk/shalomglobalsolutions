@@ -528,7 +528,7 @@ export default function ServiceDetailContent({ serviceSlug }: { serviceSlug?: st
                 <p className="text-muted-foreground text-sm font-500 mb-6">
                   {service.pricingNote}
                 </p>
-                <ContactForm />
+                <ContactForm initialService={service.title} />
               </div>
             </div>
           </div>

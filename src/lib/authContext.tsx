@@ -18,7 +18,7 @@ interface AuthContextType {
   isAdmin: boolean;
 }
 
-const ADMIN_EMAIL = 'rahulbadugu22@gmail.com';
+const ADMIN_EMAILS = ['rahulbadugu22@gmail.com', 'sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'];
 const ADMIN_PASS = '7981255989';
 
 const AuthContext = createContext<AuthContextType>({
@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (cachedAuth) {
         try {
           const parsed = JSON.parse(cachedAuth);
-          if (parsed?.email === ADMIN_EMAIL) {
+          if (parsed?.email && ADMIN_EMAILS.includes(parsed.email.toLowerCase())) {
             setUser(parsed);
           }
         } catch (e) {
@@ -72,8 +72,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const cleanPass = pass.trim();
 
     // Check against authorized email
-    if (cleanEmail !== ADMIN_EMAIL.toLowerCase()) {
-      return { success: false, error: 'Unauthorized email address. Only the authorized administrator can access this dashboard.' };
+    if (!ADMIN_EMAILS.includes(cleanEmail)) {
+      return { success: false, error: 'Unauthorized email address. Only authorized administrators can access this dashboard.' };
     }
 
     try {
@@ -102,8 +102,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // If direct match with provided credentials, allow access with local admin state
-      if (cleanEmail === ADMIN_EMAIL && cleanPass === ADMIN_PASS) {
-        const fallbackAdmin = { email: ADMIN_EMAIL, uid: 'admin_rahul_shalom' };
+      if (ADMIN_EMAILS.includes(cleanEmail) && cleanPass === ADMIN_PASS) {
+        const fallbackAdmin = { email: cleanEmail, uid: 'admin_shalom_' + cleanEmail.split('@')[0] };
         setUser(fallbackAdmin);
         if (typeof window !== 'undefined') {
           localStorage.setItem('shalom_admin_auth', JSON.stringify(fallbackAdmin));
@@ -127,7 +127,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const isAdmin = Boolean(user && user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+  const isAdmin = Boolean(user && user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout, isAdmin }}>

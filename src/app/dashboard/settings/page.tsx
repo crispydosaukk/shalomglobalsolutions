@@ -6,15 +6,16 @@ import { useCMS } from '@/lib/cmsContext';
 
 export default function EmailSettingsPage() {
   const { content, updateSection, isSyncing, lastSavedAt } = useCMS();
+  const defaultRecipients = ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'];
   const currentSettings = content?.emailSettings || {
     notificationsEnabled: true,
-    recipients: ['rahulbadugu22@gmail.com'],
+    recipients: defaultRecipients,
     senderName: 'ShalomGlobal Notifications',
     subjectPrefix: '🔔 New ShalomGlobal Lead',
   };
 
   const [enabled, setEnabled] = useState(currentSettings.notificationsEnabled);
-  const [recipients, setRecipients] = useState<string[]>(currentSettings.recipients || ['rahulbadugu22@gmail.com']);
+  const [recipients, setRecipients] = useState<string[]>(currentSettings.recipients || defaultRecipients);
   const [newEmailInput, setNewEmailInput] = useState('');
   const [senderName, setSenderName] = useState(currentSettings.senderName || 'ShalomGlobal Notifications');
   const [subjectPrefix, setSubjectPrefix] = useState(currentSettings.subjectPrefix || '🔔 New ShalomGlobal Lead');
@@ -26,7 +27,7 @@ export default function EmailSettingsPage() {
   useEffect(() => {
     if (content?.emailSettings) {
       setEnabled(content.emailSettings.notificationsEnabled ?? true);
-      setRecipients(content.emailSettings.recipients || ['rahulbadugu22@gmail.com']);
+      setRecipients(content.emailSettings.recipients || defaultRecipients);
       setSenderName(content.emailSettings.senderName || 'ShalomGlobal Notifications');
       setSubjectPrefix(content.emailSettings.subjectPrefix || '🔔 New ShalomGlobal Lead');
     }

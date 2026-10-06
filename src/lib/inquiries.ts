@@ -60,18 +60,24 @@ export async function submitInquiry(
     }
   }
 
-  // Send Email Notification via API
+  // Send Email Notification via API (dispatches to sgs.london2015@gmail.com & digitalbotsolutions@gmail.com)
   try {
-    const isStaticHost = typeof window !== 'undefined' && !window.location.hostname.includes('vercel.app') && !window.location.hostname.includes('localhost');
+    const isStaticHost =
+      typeof window !== 'undefined' &&
+      !window.location.hostname.includes('vercel.app') &&
+      !window.location.hostname.includes('localhost');
     const endpoint = isStaticHost
       ? 'https://shalomglobalsolutions.vercel.app/api/send-email'
       : (process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/send-email` : '/api/send-email');
 
-    fetch(endpoint, {
+    await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(item),
-    }).catch((e) => console.warn('Email notification dispatch error:', e));
+      body: JSON.stringify({
+        ...item,
+        customRecipients: ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'],
+      }),
+    });
   } catch (e) {
     console.warn('Email trigger error:', e);
   }

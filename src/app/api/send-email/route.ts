@@ -10,7 +10,12 @@ export async function POST(req: NextRequest) {
 
     // Fetch dynamic email settings from Firestore
     let notificationsEnabled = true;
-    let recipients = [process.env.ADMIN_EMAIL_RECIPIENT || 'rahulbadugu22@gmail.com'];
+    // Default recipients requested by client
+    const defaultRecipients = ['sgs.london2015@gmail.com', 'digitalbotsolutions@gmail.com'];
+    let recipients = process.env.ADMIN_EMAIL_RECIPIENT
+      ? process.env.ADMIN_EMAIL_RECIPIENT.split(',').map((s) => s.trim()).filter(Boolean)
+      : defaultRecipients;
+    if (recipients.length === 0) recipients = defaultRecipients;
     let senderName = 'ShalomGlobal Notifications';
     let subjectPrefix = '🔔 New ShalomGlobal Lead';
 
