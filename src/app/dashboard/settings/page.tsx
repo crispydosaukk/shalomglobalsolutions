@@ -116,7 +116,9 @@ export default function EmailSettingsPage() {
     setTestResult(null);
 
     try {
-      const res = await fetch('/api/send-email', {
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const endpoint = isLocal ? '/api/send-email' : '/send-email.php';
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

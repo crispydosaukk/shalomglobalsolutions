@@ -60,15 +60,10 @@ export async function submitInquiry(
     }
   }
 
-  // Send Email Notification via API (dispatches to sgs.london2015@gmail.com & digitalbotsolutions@gmail.com)
+  // Send Email Notification (dispatches to sgs.london2015@gmail.com, digitalbotsolutions@gmail.com, info@shalomgsolutions.co.uk)
   try {
-    const isStaticHost =
-      typeof window !== 'undefined' &&
-      !window.location.hostname.includes('vercel.app') &&
-      !window.location.hostname.includes('localhost');
-    const endpoint = isStaticHost
-      ? 'https://shalomglobalsolutions.vercel.app/api/send-email'
-      : (process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/send-email` : '/api/send-email');
+    const isLocalDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const endpoint = isLocalDev ? '/api/send-email' : '/send-email.php';
 
     await fetch(endpoint, {
       method: 'POST',
@@ -79,7 +74,7 @@ export async function submitInquiry(
       }),
     });
   } catch (e) {
-    console.warn('Email trigger error:', e);
+    console.warn('Email trigger notice:', e);
   }
 
   // Firestore submission
