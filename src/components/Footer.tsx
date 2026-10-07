@@ -134,13 +134,13 @@ export default function Footer() {
                 {l?.label}
               </Link>
             ))}
-            {/* <Link
+            <Link
               href="/dashboard/login"
               className="text-xs text-white/40 hover:text-secondary transition-colors font-600 flex items-center gap-1"
             >
               <Icon name="LockClosedIcon" size={12} />
               Admin
-            </Link> */}
+            </Link>
           </div>
         </div>
       </div>
