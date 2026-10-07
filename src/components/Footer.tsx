@@ -18,7 +18,7 @@ const footerLinks = {
     { label: 'About Us', href: '/about' },
     { label: 'Blog', href: '/blog' },
     { label: 'Contact', href: '/contact' },
-    { label: 'Admin Panel', href: '/dashboard/login' },
+    // { label: 'Admin Panel', href: '/dashboard/login' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/contact' },
@@ -134,13 +134,13 @@ export default function Footer() {
                 {l?.label}
               </Link>
             ))}
-            <Link
+            {/* <Link
               href="/dashboard/login"
               className="text-xs text-white/40 hover:text-secondary transition-colors font-600 flex items-center gap-1"
             >
               <Icon name="LockClosedIcon" size={12} />
               Admin
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
